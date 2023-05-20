@@ -11,33 +11,22 @@ import qrcode
 listHoldAddress = []
 
 def gen_eth_key(language, entropyStrength):
-    # generate seed phrase
     mnemo = mnemonic.Mnemonic(language)
     seedPhrase = mnemo.generate(entropyStrength)
     seedPhraseLength = len(seedPhrase.split(" "))
 
-    # generate wallet w/ a single private/public key (address)
     wallet = bip44.Wallet(seedPhrase)
     secretKey, publicKey = wallet.derive_account("eth", account=0)
-    
-    # generate coincurve private key instance (to do stuff with...?)
+
     secretKey = coincurve.PrivateKey(secretKey)
-    
-    # coincurve instance validation
-    if secretKey.public_key.format() != publicKey:
-        print("\n** WARNING **: secretKey derived from coincurve DOES NOT match publicKey dervived from bip44")
-    else:
-        print("\n... note: coincurve validation checked out just fine")
-        
-    # derive publc address from public key?
+    secretKey.public_key.format() == publicKey
     address = bip44.utils.get_eth_addr(publicKey)
 
     listHoldAddress.append(address)
     
-    # print everything
-    print("\nSeed Phrase ({} words):\n {}" .format(seedPhraseLength, seedPhrase))
-    print("\naddress: {}" .format(address))
-    print("secret: {}\n".format(secretKey.to_hex()))
+    print("Address: {}\n" .format(address))
+    print("Seed Phrase: {}\n" .format(seedPhrase))
+    print("{} words\n" .format(seedPhraseLength))
 
 def obtain_address_qr():
     readData = None
@@ -63,7 +52,6 @@ if __name__ == "__main__":
     entropyStrength = int(256)
     execute = None
     
-    print("GO - genethkey.py")
     for command in sys.argv[1:]:
         if command == str("--generate") or command == str("-g"):
             execute = gen_eth_key(language, entropyStrength)
@@ -71,4 +59,3 @@ if __name__ == "__main__":
             execute = obtain_address_qr()
         if command == str("--help") or command == str("-h"):
             execute = help_me()
-    print("DONE - genethkey.py")
