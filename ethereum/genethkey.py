@@ -10,7 +10,7 @@ import qrcode
 
 listHoldAddress = []
 
-def gen_from_seed(language, entropyStrength, seedPhrase, account_num=0):
+def gen_from_seed(entropyStrength, seedPhrase, account_num=0):
     seedPhraseLength = len(seedPhrase.split(" "))
     
     # generate wallet w/ a single private/public key (address)
@@ -35,6 +35,7 @@ def gen_from_seed(language, entropyStrength, seedPhrase, account_num=0):
     print("\nSeed Phrase ({} words):\n {}" .format(seedPhraseLength, seedPhrase))
     print("\naddress: {}" .format(address))
     print("secret: {}\n".format(secretKey.to_hex()))
+    print("#========================================================#")
     
 def gen_eth_key(language, entropyStrength):
     # generate seed phrase
@@ -104,5 +105,5 @@ if __name__ == "__main__":
             else:
                 for x in range(0,10):
                     print(f"account # {x}")
-                    execute = gen_from_seed(language, entropyStrength, seed, x)
+                    execute = gen_from_seed(entropyStrength, seed, x)
     print("DONE - genethkey.py")
